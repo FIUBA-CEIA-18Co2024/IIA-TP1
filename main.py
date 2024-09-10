@@ -42,17 +42,28 @@ def execute_algorithm(problem_hanoi: ProblemHanoi, solver: Callable) ->  NodeHan
     return last_node
 
 def solve_problem(name: str, problem_hanoi: ProblemHanoi, solver: Callable) -> None:
+    """
+    Función que resuelve el problema de la Torre de Hanoi utilizando un algoritmo de búsqueda.
+
+    Args:
+        name (str): Nombre del algoritmo a utilizar
+        problem_hanoi (ProblemHanoi): Instancia del problema de la Torre de Hanoi
+        solver (Callable): Algoritmo de búsqueda a utilizar
+    """
     print(f'-'*50)
     print(f'Solving problem using {name}')
     
     last_node = execute_algorithm(problem_hanoi, breadth_first_graph_search)
 
     if isinstance(last_node, NodeHanoi):
-        # Imprime la longitud del camino de la solución encontrada
+        # Imprimimos la longitud del camino de la solución encontrada
         print(f'Longitud del camino de la solución: {last_node.state.accumulated_cost}')
 
         # Genera los JSON para el simulador
-        last_node.generate_solution_for_simulator()
+        last_node.generate_solution_for_simulator(
+            initial_state_file=f"./src/simulator/solutions/initial_state_{name}.json",
+            sequence_file=f"./src/simulator/solutions/sequence_{name}.json"
+        )
     else:
         print(last_node)
         print("No se encuentra solución")
@@ -67,18 +78,20 @@ def main() -> None:
     """
     Función principal que resuelve el problema de la Torre de Hanoi y genera los JSON para el simulador.
     """
-    # Define el estado inicial y el estado objetivo del problema
+    # Definimos estado inicial y estado final del problema a resolver
     initial_state = StatesHanoi([5, 4, 3, 2, 1], [], [], max_disks=5)
     goal_state = StatesHanoi([], [], [5, 4, 3, 2, 1], max_disks=5)
 
-    # Crea una instancia del problema de la Torre de Hanoi
+    # Se crea una instancia del problema de la Torre de Hanoi
     problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
 
+    # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
     problems = {
         'breadth_first_tree_search': breadth_first_tree_search,
         'breadth_first_graph_search2': breadth_first_graph_search
     }
-        
+    
+    # Se resuelve el problema para cada algoritmo de búsqueda
     for name, search in problems.items():
         solve_problem(name, problem_hanoi, search)
         

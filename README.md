@@ -28,18 +28,44 @@ Pueden ahorrar tiempo usando el código ya implementado en Python que se encuent
 ```bash
 # instalar dependencias
 pip install -r requirements.txt
+```
 
+Definir diccionario con mapeo de algoritmos aplicar para encontrar soluciones
+```python
+problems = {
+        'breadth_first_tree_search': breadth_first_tree_search,
+        'breadth_first_graph_search2': breadth_first_graph_search
+    }
+```
+
+```bash
 # resolver hanoi con parametros definidos en main.py
 python main.py solve
 
+--------------------------------------------------
+Solving problem using breadth_first_tree_search
 233 caminos se expandieron y 10 caminos quedaron en la frontera
-Longitud del camino de la solución: 31.0
+Tiempo que demoró execute_algorithm: 0.052971 [s]
 Maxima memoria ocupada: 0.32 [MB]
-Tiempo que demoró: 0.046685530000104336 [s]
-
-# correr simulacion con ultima solucion generada
-python main.py simulate
+Longitud del camino de la solución: 31.0
+--------------------------------------------------
+Solving problem using breadth_first_graph_search2
+233 caminos se expandieron y 10 caminos quedaron en la frontera
+Tiempo que demoró execute_algorithm: 0.067039 [s]
+Maxima memoria ocupada: 0.29 [MB]
+Longitud del camino de la solución: 31.0
 ```
+
+Correr simulacion. Se generaran dos archivos JSON por algoritmo de busqueda utilizado en **./src/simulator/solutions** llamados **initial_state_{name}.json** y **sequence_{name}.json**. Entonces, para ejecutar una simulación realizamos lo siguiente:
+
+```bash
+# correr simulacion con ultima solucion generada
+python main.py simulate breadth_first_tree_search
+python main.py simulate breadth_first_graph_search2
+```
+
+### Data Analysis
+<img src="img/data.png" />
 
 ### Referencias
 - Implementación: [Torres de Hanoi](src/README.md)

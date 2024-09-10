@@ -20,14 +20,21 @@ def load_configuration(file_path):
     with open(file_path, "r") as json_file:
         return json.load(json_file)
 
-
+if len(sys.argv) >= 3:
+    initial_state_filename = f"./src/simulator/solutions/initial_state_{sys.argv[2]}.json"
+    sequence_state_filename = f"./src/simulator/solutions/sequence_{sys.argv[2]}.json"
+else:
+    initial_state_filename = "./src/simulator/solutions/initial_state.json"
+    sequence_state_filename = "./src/simulator/solutions/sequence.json"
+    
 # Load initial and sequence states
-initial_state = load_configuration("./src/simulator/initial_state.json")
-sequence = load_configuration("./src/simulator/sequence.json")
+if sys.argv[1] == "simulate":
+    initial_state = load_configuration(initial_state_filename)
+    sequence = load_configuration(sequence_state_filename)
 
-# These two variables are important for the animator and the sequencer
-number_of_disks = sprites.obtain_number_of_disks(initial_state)
-disk_height = sprites.obtain_disks_height(number_of_disks)
+    # These two variables are important for the animator and the sequencer
+    number_of_disks = sprites.obtain_number_of_disks(initial_state)
+    disk_height = sprites.obtain_disks_height(number_of_disks)
 
 
 # ----------------------------------------------
