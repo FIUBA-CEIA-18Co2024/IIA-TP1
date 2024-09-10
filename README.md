@@ -24,6 +24,17 @@ Para resolver este TP son libres de usar los recursos que crean necesarios. Pued
 Pueden ahorrar tiempo usando el código ya implementado en Python que se encuentra en el repositorio hanoi_tower. Si usan este código, solo deben implementar el algoritmo de búsqueda, pero es importante que lean el código y entiendan que es cada parte
 
 
+### Usar script
+```bash
+# instalar dependencias
+pip install -r requirements.txt
+
+# resolver hanoi con parametros definidos en main.py
+python main.py solve
+
+# correr simulacion con ultima solucion generada
+python main.py simulate
+```
 
 ### Referencias
 - Implementación: [Torres de Hanoi](src/README.md)
