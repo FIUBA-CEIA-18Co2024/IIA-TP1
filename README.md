@@ -32,6 +32,11 @@ pip install -r requirements.txt
 # resolver hanoi con parametros definidos en main.py
 python main.py solve
 
+233 caminos se expandieron y 10 caminos quedaron en la frontera
+Longitud del camino de la solución: 31.0
+Maxima memoria ocupada: 0.32 [MB]
+Tiempo que demoró: 0.046685530000104336 [s]
+
 # correr simulacion con ultima solucion generada
 python main.py simulate
 ```
