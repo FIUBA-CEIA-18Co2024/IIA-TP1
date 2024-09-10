@@ -1,6 +1,6 @@
 from collections import deque
-import tree_hanoi
-import hanoi_states
+from src import tree_hanoi
+from src import hanoi_states
 
 
 def breadth_first_tree_search(problem: hanoi_states.ProblemHanoi):

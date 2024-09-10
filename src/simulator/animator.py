@@ -1,5 +1,5 @@
-import logic
-from constants import *
+from src.simulator import logic
+from src.simulator.constants import *
 
 
 class Animator:

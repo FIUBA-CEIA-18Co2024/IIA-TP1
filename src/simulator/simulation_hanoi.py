@@ -3,12 +3,12 @@ import pygame
 import sys
 
 # Importing custom modules
-import animator
-import background
-import logic
-import sprites
-import synchronizer
-from constants import *
+from src.simulator import animator
+from src.simulator import background
+from src.simulator import logic
+from src.simulator import sprites
+from src.simulator import synchronizer
+from src.simulator.constants import *
 
 
 # ----------------------------------------------
@@ -22,8 +22,8 @@ def load_configuration(file_path):
 
 
 # Load initial and sequence states
-initial_state = load_configuration("./initial_state.json")
-sequence = load_configuration("./sequence.json")
+initial_state = load_configuration("./src/simulator/initial_state.json")
+sequence = load_configuration("./src/simulator/sequence.json")
 
 # These two variables are important for the animator and the sequencer
 number_of_disks = sprites.obtain_number_of_disks(initial_state)

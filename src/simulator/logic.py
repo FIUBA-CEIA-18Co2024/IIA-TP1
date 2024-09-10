@@ -1,4 +1,4 @@
-from constants import *
+from src.simulator.constants import *
 
 
 class HanoiPeg:

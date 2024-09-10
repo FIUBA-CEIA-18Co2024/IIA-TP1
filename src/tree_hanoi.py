@@ -1,6 +1,6 @@
 import json
-import aima
-import hanoi_states
+from src import aima
+from src import hanoi_states
 
 
 class NodeHanoi(aima.Node):
@@ -35,8 +35,8 @@ class NodeHanoi(aima.Node):
         next_node = NodeHanoi(next_state, parent=self, action=action)
         return next_node
 
-    def generate_solution_for_simulator(self, initial_state_file="./initial_state.json",
-                                        sequence_file="./sequence.json"):
+    def generate_solution_for_simulator(self, initial_state_file="./src/simulator/initial_state.json",
+                                        sequence_file="./src/simulator/sequence.json"):
         """
         Genera los archivos JSON para el simulador de la Torre de Hanoi.
 

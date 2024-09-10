@@ -1,8 +1,10 @@
-import tracemalloc
+import sys
 import time
-from hanoi_states import StatesHanoi, ProblemHanoi
-from tree_hanoi import NodeHanoi
-from search import (  # Importa las funciones de búsqueda del módulo search
+import tracemalloc
+from src.simulator import simulation_hanoi
+from src.hanoi_states import StatesHanoi, ProblemHanoi
+from src.tree_hanoi import NodeHanoi
+from src.search import (  # Importa las funciones de búsqueda del módulo search
     breadth_first_tree_search,
     breadth_first_graph_search
 )
@@ -55,7 +57,20 @@ def main():
     print(f"Tiempo que demoró: {elapsed_time} [s]", )
     print(f"Maxima memoria ocupada: {round(memory_peak, 2)} [MB]", )
 
+def simulate():
+    """
+    Función que simula la solución del problema de la Torre de Hanoi.
+    """
+    simulation_hanoi.main()
 
-# Sección de ejecución del programa
+
 if __name__ == "__main__":
-    main()
+    """
+    Sección de ejecución del programa
+    """
+    
+    if sys.argv[1] == "solve":
+        main()
+        
+    if sys.argv[1] == "simulate":
+        simulate()
