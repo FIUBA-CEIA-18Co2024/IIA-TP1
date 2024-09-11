@@ -1,6 +1,6 @@
 from src.services.databases import Base
 from src.config.settings import config
-from sqlalchemy import Column, Integer, String, JSON, Float, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, Float, DateTime
 
 
 
@@ -11,6 +11,7 @@ class Metrics(Base):
     timestamp = Column(DateTime, unique=True)
     model_name = Column(String(200))
     disks = Column(Integer)
+    movements = Column(Integer)
     memory_allocation = Column(Float)
     execution_time = Column(Float)
     comments = Column(String(1000))

@@ -4,6 +4,8 @@ import tracemalloc
 from typing import Callable
 from src.simulator import simulation_hanoi
 from src.hanoi_states import StatesHanoi, ProblemHanoi
+from src.models.metrics import Metrics
+from src.services.databases import DatabaseService
 from src.tree_hanoi import NodeHanoi
 from src.search import (
     breadth_first_tree_search,
@@ -26,6 +28,17 @@ def metrics(func):
         
         print(f"Tiempo que demoró {func.__name__}: {execution_time:4f} [s]", )
         print(f"Maxima memoria ocupada: {round(memory_peak, 2)} [MB]", )
+        
+        if 'db' in sys.argv[1]:
+            db = DatabaseService()           
+            db.add(Metrics(
+                model_name="breadth_first_graph_search",
+                disks=5,
+                memory_allocation=memory_peak,
+                execution_time=execution_time,
+                comments="",
+            ))
+            
         
         # TODO: Insert data in DB for futher analysis
         return result
@@ -90,7 +103,7 @@ def main() -> None:
         'breadth_first_tree_search': breadth_first_tree_search,
         'breadth_first_graph_search2': breadth_first_graph_search
     }
-    
+        
     # Se resuelve el problema para cada algoritmo de búsqueda
     for name, search in problems.items():
         solve_problem(name, problem_hanoi, search)
@@ -102,6 +115,10 @@ if __name__ == "__main__":
     """
     
     if sys.argv[1] == "solve":
+        main()
+    
+    if sys.argv[1] == "solve-db":
+        DatabaseService.init_database()
         main()
         
     if sys.argv[1] == "simulate":

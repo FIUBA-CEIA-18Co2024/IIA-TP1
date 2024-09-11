@@ -1,6 +1,6 @@
 from typing import List, Union
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, close_all_sessions
 
@@ -22,22 +22,12 @@ engine = create_engine(
     }
 )
 
-"""
-# SQLite requires next decorator in order to use foreign key
-@event.listens_for(engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
-"""
-
-
 # The new base class will be given a metaclass that produces appropriate Table objects and makes the appropriate
 # mapper() calls based on the information provided declarative in the class and any subclasses of the class:
 Base = declarative_base()
 
 # The 'sessionmaker' factory generates new Session objects when called
-SessionLocalFactory = sessionmaker(bind=engine, autocommit=True, autoflush=False)
+SessionLocalFactory = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
 class DatabaseService:
@@ -88,7 +78,10 @@ class DatabaseService:
                     print(f"Adding '{model_instance}' into DB.")
                     merged = session.merge(model_instance)
                     session.add(merged)
+                    session.commit()
         except SQLAlchemyError as e:
             print(f"Error adding into DB. Detail: {e}")
         else:
             print(f"Add successful.")
+            
+            
