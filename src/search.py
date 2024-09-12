@@ -59,9 +59,9 @@ def breadth_first_graph_search(problem: hanoi_states.ProblemHanoi, display: bool
 
     return None
 
-def heuristic_func (nodeState):
-    return -1 * sum(nodeState.rods[-1])
-
+def heuristic_func_astar (nodeState):
+    return (-1 * sum(nodeState.rods[-1]))
+   
 def astar_search(problem: hanoi_states.ProblemHanoi, display: bool = False):
     """
     A* search algorithm for the Tower of Hanoi problem using tree_hanoi.NodeHanoi.
@@ -75,13 +75,63 @@ def astar_search(problem: hanoi_states.ProblemHanoi, display: bool = False):
     
     def f(new_node):
         # The f(n) function combines the actual path cost (g) and the heuristic estimate (h)
-        return new_node.path_cost + heuristic_func(new_node.state)
+        return heuristic_func_astar(new_node.state) + new_node.path_cost
 
     node = tree_hanoi.NodeHanoi(problem.initial)
     if problem.goal_test(node.state):
         return node
     
     frontier = aima.PriorityQueue(order='min', f=f)
+    frontier.append(node)
+    
+    # Dictionary to track the best-known path to a state
+    reached = {node.state: node}
+    
+    while len(frontier) > 0:
+        node = frontier.pop()
+        
+        if problem.goal_test(node.state):
+            if display:
+                print(len(reached), "caminos se expandieron y", len(frontier), "caminos quedaron en la frontera")
+            return (node, len(reached), len(frontier))
+        
+        # Expand the node to generate successors
+        for child in node.expand(problem):
+            s = child.state  
+            
+            # If this state has not been reached before, or we found a better path
+            if s not in reached or f(child) < f(reached[s]):
+                reached[s] = child  # Update the reached dictionary with the better node
+                # If the child is already in the frontier with a higher cost, remove it
+                if child in frontier:
+                    del frontier[child]
+                # Add the child node to the frontier
+                frontier.append(child)
+
+    return "failure"
+
+def heuristic_func_greedy (nodeState):
+    return sum(nodeState.rods[-1])-sum(nodeState.rods[0])
+
+def greedy_search(problem: hanoi_states.ProblemHanoi, display: bool = False):
+    """
+    A* search algorithm for the Tower of Hanoi problem using tree_hanoi.NodeHanoi.
+    
+    Parameters:
+        problem (hanoi_states.ProblemHanoi): The Tower of Hanoi problem instance.
+
+    Returns:
+        tree_hanoi.NodeHanoi: The node containing the solution, or "failure" if no solution is found.
+    """
+    
+    def f(new_node):
+        return heuristic_func_greedy(new_node.state) 
+
+    node = tree_hanoi.NodeHanoi(problem.initial)
+    if problem.goal_test(node.state):
+        return node
+    
+    frontier = aima.PriorityQueue(order='max', f=f)
     frontier.append(node)
     
     # Dictionary to track the best-known path to a state

@@ -15,6 +15,7 @@ class Metrics(Base):
     frontiers = Column(Integer)
     memory_allocation = Column(Float)
     execution_time = Column(Float)
+    cost = Column(Integer)
     comments = Column(String(1000))
     
     def __repr__(self):

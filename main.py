@@ -11,7 +11,8 @@ from src.tree_hanoi import NodeHanoi
 from src.search import (
     breadth_first_tree_search,
     breadth_first_graph_search,
-    astar_search
+    astar_search,
+    greedy_search
 )
 
 
@@ -47,6 +48,7 @@ def metrics(func):
                 execution_time=execution_time,
                 movements = explored,
                 frontiers = frontier,
+                cost = result.state.accumulated_cost,
                 comments="",
             ))
             
@@ -75,7 +77,7 @@ def solve_problem(name: str, disks: int, problem_hanoi: ProblemHanoi, solver: Ca
         solver (Callable): Algoritmo de búsqueda a utilizar
     """
     print(f'-'*50)
-    print(f'Solving problem using {name}')
+    print(f'Solving problem using {name} and {disks} disks')
     
     last_node = execute_algorithm(name, disks, problem_hanoi, solver)
 
@@ -104,9 +106,9 @@ def main(iterate=None) -> None:
     """
     if iterate is None:
         # Definimos estado inicial y estado final del problema a resolver
-        disks = 8
-        initial_state = StatesHanoi([8, 7, 6, 5, 4, 3, 2, 1], [], [], max_disks=disks)
-        goal_state = StatesHanoi([], [], [8, 7, 6, 5, 4, 3, 2, 1], max_disks=disks)
+        disks = 5
+        initial_state = StatesHanoi([5, 4, 3, 2, 1], [], [], max_disks=disks)
+        goal_state = StatesHanoi([], [], [5, 4, 3, 2, 1], max_disks=disks)
 
         # Se crea una instancia del problema de la Torre de Hanoi
         problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
@@ -115,7 +117,8 @@ def main(iterate=None) -> None:
         problems = {
             #'breadth_first_tree_search': breadth_first_tree_search,
             'breadth_first_graph_search': breadth_first_graph_search,
-            'astar_search': astar_search
+            'astar_search': astar_search,
+            'greedy_search': greedy_search
         }
 
         # Se resuelve el problema para cada algoritmo de búsqueda
@@ -123,10 +126,10 @@ def main(iterate=None) -> None:
             solve_problem(name, disks, problem_hanoi, search)
            # Definimos estado inicial y estado final del problema a resolver
     elif '-m' in sys.argv[1]:
-        for i in range(1, int(iterate)+1):
+        for i in range(3, int(iterate)+1):
             for j in range(10):
                 disks = i
-                state = list(range(i,0,-1))
+                state = list(range(i,2,-1)) + [2, 1]
                 initial_state = StatesHanoi(state, [], [], max_disks=disks)
                 goal_state = StatesHanoi([], [], state, max_disks=disks)
                 # Se crea una instancia del problema de la Torre de Hanoi
@@ -136,7 +139,8 @@ def main(iterate=None) -> None:
                 problems = {
                     #'breadth_first_tree_search': breadth_first_tree_search,
                     'breadth_first_graph_search': breadth_first_graph_search,
-                    'astar_search': astar_search
+                    'astar_search': astar_search,
+                    'greedy_search': greedy_search
                 }
 
                 # Se resuelve el problema para cada algoritmo de búsqueda
