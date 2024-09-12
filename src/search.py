@@ -59,9 +59,23 @@ def breadth_first_graph_search(problem: hanoi_states.ProblemHanoi, display: bool
 
     return None
 
-def heuristic_func_astar (nodeState):
+def heuristic_func_astar_1 (nodeState):
     return (-1 * sum(nodeState.rods[-1]))
-   
+
+def heuristic_func_astar_2 (nodeState, num_of_disks=5):
+    def compute_rod(current_rod, number_of_disks):
+        goal_rod = list(range(number_of_disks, 0, -1))
+        result = [0] * number_of_disks
+        for i in range(min(len(current_rod), number_of_disks)):
+            if current_rod[i] == goal_rod[i]:
+                result[i] = 1
+        return result
+    num_of_disks = max(max(rod) for rod in nodeState.rods if len(rod) > 0)
+    current_target_rod_disks = nodeState.rods[-1]
+    computed_rod = compute_rod(current_target_rod_disks, num_of_disks)
+    reward = sum([-2**(num_of_disks-idx-1)*i for idx, i in enumerate(computed_rod)])
+    return reward
+
 def astar_search(problem: hanoi_states.ProblemHanoi, display: bool = False):
     """
     A* search algorithm for the Tower of Hanoi problem using tree_hanoi.NodeHanoi.
@@ -75,9 +89,10 @@ def astar_search(problem: hanoi_states.ProblemHanoi, display: bool = False):
     
     def f(new_node):
         # The f(n) function combines the actual path cost (g) and the heuristic estimate (h)
-        return heuristic_func_astar(new_node.state) + new_node.path_cost
+        return heuristic_func_astar_2(new_node.state) + new_node.path_cost
 
     node = tree_hanoi.NodeHanoi(problem.initial)
+
     if problem.goal_test(node.state):
         return node
     
