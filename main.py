@@ -10,7 +10,8 @@ from src.services.databases import DatabaseService
 from src.tree_hanoi import NodeHanoi
 from src.search import (
     breadth_first_tree_search,
-    breadth_first_graph_search
+    breadth_first_graph_search,
+    astar_search
 )
 
 
@@ -68,7 +69,7 @@ def solve_problem(name: str, disks: int, problem_hanoi: ProblemHanoi, solver: Ca
     print(f'-'*50)
     print(f'Solving problem using {name}')
     
-    last_node = execute_algorithm(name, disks, problem_hanoi, breadth_first_graph_search)
+    last_node = execute_algorithm(name, disks, problem_hanoi, solver)
 
     if isinstance(last_node, NodeHanoi):
         # Imprimimos la longitud del camino de la solución encontrada
@@ -103,8 +104,9 @@ def main() -> None:
 
     # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
     problems = {
-        'breadth_first_tree_search': breadth_first_tree_search,
-        'breadth_first_graph_search2': breadth_first_graph_search
+        #'breadth_first_tree_search': breadth_first_tree_search,
+        'breadth_first_graph_search': breadth_first_graph_search,
+        'astar_search': astar_search
     }
         
     # Se resuelve el problema para cada algoritmo de búsqueda
