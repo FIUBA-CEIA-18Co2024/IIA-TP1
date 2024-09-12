@@ -100,15 +100,14 @@ def simulate() -> None:
     """
     simulation_hanoi.main()
 
-def main(iterate=None) -> None:
+def main(disks: int = 5, iterate=None) -> None:
     """
     Función principal que resuelve el problema de la Torre de Hanoi y genera los JSON para el simulador.
     """
     if iterate is None:
         # Definimos estado inicial y estado final del problema a resolver
-        disks = 5
-        initial_state = StatesHanoi([5, 4, 3, 2, 1], [], [], max_disks=disks)
-        goal_state = StatesHanoi([], [], [5, 4, 3, 2, 1], max_disks=disks)
+        initial_state = StatesHanoi(list(range(disks,0,-1)), [], [], max_disks=disks)
+        goal_state = StatesHanoi([], [], list(range(disks,0,-1)), max_disks=disks)
 
         # Se crea una instancia del problema de la Torre de Hanoi
         problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
@@ -124,7 +123,7 @@ def main(iterate=None) -> None:
         # Se resuelve el problema para cada algoritmo de búsqueda
         for name, search in problems.items():
             solve_problem(name, disks, problem_hanoi, search)
-           # Definimos estado inicial y estado final del problema a resolver
+        # Definimos estado inicial y estado final del problema a resolver
     elif '-m' in sys.argv[1]:
         for i in range(3, int(iterate)+1):
             for j in range(10):
@@ -146,7 +145,6 @@ def main(iterate=None) -> None:
                 # Se resuelve el problema para cada algoritmo de búsqueda
                 for name, search in problems.items():
                     solve_problem(name, disks, problem_hanoi, search)
-        
 
 if __name__ == "__main__":
     """
@@ -154,7 +152,8 @@ if __name__ == "__main__":
     """
     
     if sys.argv[1] == "solve":
-        main()
+        disks = int(sys.argv[2]) if len(sys.argv) > 2 else 5 
+        main(disks)
     
     if sys.argv[1] == "solve-db":
         DatabaseService.init_database()
