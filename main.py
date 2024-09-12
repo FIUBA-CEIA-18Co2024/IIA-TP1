@@ -95,9 +95,9 @@ def main() -> None:
     Función principal que resuelve el problema de la Torre de Hanoi y genera los JSON para el simulador.
     """
     # Definimos estado inicial y estado final del problema a resolver
-    disks = 5
-    initial_state = StatesHanoi([5, 4, 3, 2, 1], [], [], max_disks=disks)
-    goal_state = StatesHanoi([], [], [5, 4, 3, 2, 1], max_disks=disks)
+    disks = 7
+    initial_state = StatesHanoi([7, 6, 5, 4, 3, 2, 1], [], [], max_disks=disks)
+    goal_state = StatesHanoi([], [], [7, 6, 5, 4, 3, 2, 1], max_disks=disks)
 
     # Se crea una instancia del problema de la Torre de Hanoi
     problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
