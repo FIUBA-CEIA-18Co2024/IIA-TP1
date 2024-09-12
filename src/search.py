@@ -52,7 +52,7 @@ def breadth_first_graph_search(problem: hanoi_states.ProblemHanoi, display: bool
         if problem.goal_test(node.state):  # Comprobamos si hemos alcanzado el estado objetivo
             if display:
                 print(len(explored), "caminos se expandieron y", len(frontier), "caminos quedaron en la frontera")
-            return node
+            return (node, len(explored), len(frontier))
         # Agregamos a la cola todos los nodos sucesores del nodo actual que no haya visitados
         frontier.extend(child for child in node.expand(problem)
                         if child.state not in explored and child not in frontier)
@@ -93,7 +93,7 @@ def astar_search(problem: hanoi_states.ProblemHanoi, display: bool = False):
         if problem.goal_test(node.state):
             if display:
                 print(len(reached), "caminos se expandieron y", len(frontier), "caminos quedaron en la frontera")
-            return node
+            return (node, len(reached), len(frontier))
         
         # Expand the node to generate successors
         for child in node.expand(problem):

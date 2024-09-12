@@ -12,6 +12,7 @@ class Metrics(Base):
     model_name = Column(String(200))
     disks = Column(Integer)
     movements = Column(Integer)
+    frontiers = Column(Integer)
     memory_allocation = Column(Float)
     execution_time = Column(Float)
     comments = Column(String(1000))

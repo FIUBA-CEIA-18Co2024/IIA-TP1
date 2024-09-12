@@ -19,9 +19,15 @@ def metrics(func):
     def wrapper(*args, **kwargs):
         start_time = time.perf_counter()  # Start the timer
         tracemalloc.start()
-        
+        explored = None
+        frontier = None
+
         result = func(*args, **kwargs)  # Call the original function
-        
+        if isinstance(result, tuple):
+            explored = result[1]
+            frontier = result[2]
+            result = result[0]
+
         end_time = time.perf_counter()  # Stop the timer
         _, memory_peak = tracemalloc.get_traced_memory()
         memory_peak /= 1024*1024
@@ -39,6 +45,8 @@ def metrics(func):
                 timestamp=datetime.now(),
                 memory_allocation=memory_peak,
                 execution_time=execution_time,
+                movements = explored,
+                frontiers = frontier,
                 comments="",
             ))
             
@@ -54,8 +62,8 @@ def execute_algorithm(name: str, disks: int, problem_hanoi: ProblemHanoi, solver
     # un poco más, 4 discos, pero 5 discos no finaliza nunca.
     #last_node = breadth_first_tree_search(problem_hanoi)
     # Resuelve el problema utilizando búsqueda en anchura, pero con memoria que recuerda caminos ya recorridos.
-    last_node = solver(problem_hanoi, display=True)
-    return last_node
+    last_node_info = solver(problem_hanoi, display=True)
+    return last_node_info
 
 def solve_problem(name: str, disks: int, problem_hanoi: ProblemHanoi, solver: Callable) -> None:
     """
@@ -90,28 +98,50 @@ def simulate() -> None:
     """
     simulation_hanoi.main()
 
-def main() -> None:
+def main(iterate=None) -> None:
     """
     Función principal que resuelve el problema de la Torre de Hanoi y genera los JSON para el simulador.
     """
-    # Definimos estado inicial y estado final del problema a resolver
-    disks = 8
-    initial_state = StatesHanoi([8, 7, 6, 5, 4, 3, 2, 1], [], [], max_disks=disks)
-    goal_state = StatesHanoi([], [], [8, 7, 6, 5, 4, 3, 2, 1], max_disks=disks)
+    if iterate is None:
+        # Definimos estado inicial y estado final del problema a resolver
+        disks = 8
+        initial_state = StatesHanoi([8, 7, 6, 5, 4, 3, 2, 1], [], [], max_disks=disks)
+        goal_state = StatesHanoi([], [], [8, 7, 6, 5, 4, 3, 2, 1], max_disks=disks)
 
-    # Se crea una instancia del problema de la Torre de Hanoi
-    problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
+        # Se crea una instancia del problema de la Torre de Hanoi
+        problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
 
-    # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
-    problems = {
-        #'breadth_first_tree_search': breadth_first_tree_search,
-        'breadth_first_graph_search': breadth_first_graph_search,
-        'astar_search': astar_search
-    }
-        
-    # Se resuelve el problema para cada algoritmo de búsqueda
-    for name, search in problems.items():
-        solve_problem(name, disks, problem_hanoi, search)
+        # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
+        problems = {
+            #'breadth_first_tree_search': breadth_first_tree_search,
+            'breadth_first_graph_search': breadth_first_graph_search,
+            'astar_search': astar_search
+        }
+
+        # Se resuelve el problema para cada algoritmo de búsqueda
+        for name, search in problems.items():
+            solve_problem(name, disks, problem_hanoi, search)
+           # Definimos estado inicial y estado final del problema a resolver
+    elif '-m' in sys.argv[1]:
+        for i in range(1, int(iterate)+1):
+            for j in range(10):
+                disks = i
+                state = list(range(i,0,-1))
+                initial_state = StatesHanoi(state, [], [], max_disks=disks)
+                goal_state = StatesHanoi([], [], state, max_disks=disks)
+                # Se crea una instancia del problema de la Torre de Hanoi
+                problem_hanoi = ProblemHanoi(initial=initial_state, goal=goal_state)
+
+                # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
+                problems = {
+                    #'breadth_first_tree_search': breadth_first_tree_search,
+                    'breadth_first_graph_search': breadth_first_graph_search,
+                    'astar_search': astar_search
+                }
+
+                # Se resuelve el problema para cada algoritmo de búsqueda
+                for name, search in problems.items():
+                    solve_problem(name, disks, problem_hanoi, search)
         
 
 if __name__ == "__main__":
@@ -128,3 +158,7 @@ if __name__ == "__main__":
         
     if sys.argv[1] == "simulate":
         simulate()
+
+    if sys.argv[1] == "solve-db-m":
+        DatabaseService.init_database()
+        main(sys.argv[2])
