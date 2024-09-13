@@ -82,9 +82,12 @@ def astar_search(problem: hanoi_states.ProblemHanoi, heuristic_func: Callable, d
     if problem.goal_test(node.state):
         return node
     
-    frontier = aima.PriorityQueue(order='min', f=f)
+    if "greedy" in getattr(heuristic_func, '__name__', 'Unknown'):
+        frontier = aima.PriorityQueue(order='max', f=f)         #greedy considere weight (higher the better)
+    else:
+        frontier = aima.PriorityQueue(order='min', f=f)         #a_star considere cost (lower the better)
     frontier.append(node)
-    
+
     # Dictionary to track the best-known path to a state
     reached = {node.state: node}
     
@@ -129,7 +132,10 @@ def greedy_search(problem: hanoi_states.ProblemHanoi, heuristic_func: Callable, 
     if problem.goal_test(node.state):
         return node
     
-    frontier = aima.PriorityQueue(order='max', f=f)
+    if "greedy" in getattr(heuristic_func, '__name__', 'Unknown'):
+        frontier = aima.PriorityQueue(order='max', f=f)     #greedy considere weight (higher the better)
+    else:
+        frontier = aima.PriorityQueue(order='min', f=f)     #a_star considere cost (lower the better)
     frontier.append(node)
     
     # Dictionary to track the best-known path to a state
