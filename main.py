@@ -11,8 +11,12 @@ from src.tree_hanoi import NodeHanoi
 from src.search import (
     breadth_first_tree_search,
     breadth_first_graph_search,
-    astar_search,
-    greedy_search
+    astar_search_heuristic1,
+    astar_search_heuristic2,
+    astar_search_heuristic3,
+    greedy_search_heuristic1,
+    greedy_search_heuristic2,
+    greedy_search_heuristic3
 )
 
 
@@ -100,9 +104,11 @@ def simulate() -> None:
     """
     simulation_hanoi.main()
 
-def main(disks: int = 5, iterate=None) -> None:
+def main(disks: int = 5, iterate: None|int = None) -> None:
     """
     Función principal que resuelve el problema de la Torre de Hanoi y genera los JSON para el simulador.
+    Si iterate es None, corre el problema con la cantidad de discos especificada.
+    Si es diferente de None, corre el problema con la cantidad de discos especificada en el rango de 3 a iterate.
     """
     if iterate is None:
         # Definimos estado inicial y estado final del problema a resolver
@@ -114,10 +120,13 @@ def main(disks: int = 5, iterate=None) -> None:
 
         # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
         problems = {
-            #'breadth_first_tree_search': breadth_first_tree_search,
             'breadth_first_graph_search': breadth_first_graph_search,
-            'astar_search': astar_search,
-            'greedy_search': greedy_search
+            'astar_search_heuristic1': astar_search_heuristic1,
+            'astar_search_heuristic2': astar_search_heuristic2,
+            'astar_search_heuristic3': astar_search_heuristic3,
+            'greedy_search_heuristic1': greedy_search_heuristic1,
+            'greedy_search_heuristic2': greedy_search_heuristic2,
+            'greedy_search_heuristic3': greedy_search_heuristic3
         }
 
         # Se resuelve el problema para cada algoritmo de búsqueda
@@ -126,7 +135,7 @@ def main(disks: int = 5, iterate=None) -> None:
         # Definimos estado inicial y estado final del problema a resolver
     elif '-m' in sys.argv[1]:
         for i in range(3, int(iterate)+1):
-            for j in range(10):
+            for j in range(10): # Se ejecuta 10 veces para obtener un promedio por cada modelo por cada valor de discos
                 disks = i
                 state = list(range(i,2,-1)) + [2, 1]
                 initial_state = StatesHanoi(state, [], [], max_disks=disks)
@@ -136,10 +145,13 @@ def main(disks: int = 5, iterate=None) -> None:
 
                 # Se resuelve el problema utilizando diferentes algoritmos de búsqueda
                 problems = {
-                    #'breadth_first_tree_search': breadth_first_tree_search,
                     'breadth_first_graph_search': breadth_first_graph_search,
-                    'astar_search': astar_search,
-                    'greedy_search': greedy_search
+                    'astar_search_heuristic1': astar_search_heuristic1,
+                    'astar_search_heuristic2': astar_search_heuristic2,
+                    'astar_search_heuristic3': astar_search_heuristic3,
+                    'greedy_search_heuristic1': greedy_search_heuristic1,
+                    'greedy_search_heuristic2': greedy_search_heuristic2,
+                    'greedy_search_heuristic3': greedy_search_heuristic3
                 }
 
                 # Se resuelve el problema para cada algoritmo de búsqueda
@@ -150,18 +162,18 @@ if __name__ == "__main__":
     """
     Sección de ejecución del programa
     """
+    disks = int(sys.argv[2]) if len(sys.argv) > 2 else 5 
     
     if sys.argv[1] == "solve":
-        disks = int(sys.argv[2]) if len(sys.argv) > 2 else 5 
         main(disks)
     
     if sys.argv[1] == "solve-db":
         DatabaseService.init_database()
-        main()
+        main(disks)
         
     if sys.argv[1] == "simulate":
         simulate()
 
     if sys.argv[1] == "solve-db-m":
         DatabaseService.init_database()
-        main(sys.argv[2])
+        main(iterate=int(sys.argv[2]))

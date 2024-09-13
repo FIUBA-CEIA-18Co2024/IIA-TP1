@@ -40,7 +40,14 @@ problems = {
 
 ```bash
 # resolver hanoi con parametros definidos en main.py
-python main.py solve
+# para todos los algoritmos definidos en diccionario problems
+python main.py solve [opcional|numero_de_discos]
+
+# Lo mismo que opcion anterior pero guarda los resultados en una base de datos externa para posterior analisis
+python main.py solve-db [opcional|numero_de_discos]
+
+# Ejecutar desde 3 discos hasta [numero_de_discos] 10 veces todos los algoritmos por cada variante para poder analizar datos posteriormente
+pyrhon main.py solve-db-m [numero_de_discos]
 
 --------------------------------------------------
 Solving problem using breadth_first_tree_search
