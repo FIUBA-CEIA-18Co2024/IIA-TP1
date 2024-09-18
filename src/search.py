@@ -116,7 +116,7 @@ def astar_search(problem: hanoi_states.ProblemHanoi, heuristic_func: Callable, d
 
 def greedy_search(problem: hanoi_states.ProblemHanoi, heuristic_func: Callable, display: bool = False):
     """
-    A* search algorithm for the Tower of Hanoi problem using tree_hanoi.NodeHanoi.
+    Greedy Search search algorithm for the Tower of Hanoi problem using tree_hanoi.NodeHanoi.
     
     Parameters:
         problem (hanoi_states.ProblemHanoi): The Tower of Hanoi problem instance.
@@ -142,7 +142,7 @@ def greedy_search(problem: hanoi_states.ProblemHanoi, heuristic_func: Callable, 
     reached = {node.state: node}
     
     while len(frontier) > 0:
-        node = frontier.pop()
+        node: tree_hanoi.NodeHanoi = frontier.pop()
         
         if problem.goal_test(node.state):
             if display:
